@@ -94,16 +94,8 @@ public class Game extends Pane {
     }
 
     private void spawnSnake() {
-        switch (numberOfPlayers) {
-            default:
-                snakes.add(new Snake(new Point2D(500, 500), 0, "SnakeHead"));
-                break;
-            case 2:
-                snakes.add(new Snake(new Point2D(500, 500), 0, "SnakeHead"));
-                snakes.add(new Snake(new Point2D(400, 400), 1, "SnakeHead2"));
-                break;
-        }
-
+        snakes.add(new Snake(new Point2D(500, 500), 0, "SnakeHead"));
+        snakes.add(new Snake(new Point2D(400, 400), 1, "SnakeHead2"));
     }
 
     public List<Snake> getSnakes() {
@@ -138,30 +130,17 @@ public class Game extends Pane {
                 counter -= 1;
             }
         }
-        if (counter == 0|| checkcollision()) {
+        if (counter == 0 || checkHeadCollision()) {
             Globals.getInstance().stopGame();
             PopupScreen.displayGameOver(Globals.getInstance().game);
         }
 
     }
 
-    private boolean checkcollision(){
+    private boolean checkHeadCollision(){
+            return Globals.getInstance().game.getSnakes().get(0).getHead().intersects(Globals.getInstance().game.getSnakes().get(1).getHead().getBoundsInLocal());
+       }
 
-        double snake1HeadPozX = round(Globals.getInstance().game.getSnakes().get(0).getHead().getX(),1);
-        double snake1HeadPozY = round(Globals.getInstance().game.getSnakes().get(0).getHead().getY(),1);
-
-        double snake2HeadPozX = round(Globals.getInstance().game.getSnakes().get(1).getHead().getX(),1);
-        double snake2HeadPozY = round(Globals.getInstance().game.getSnakes().get(1).getHead().getY(),1);
-        return snake1HeadPozX == snake2HeadPozX || snake1HeadPozY == snake2HeadPozY;
-    }
-
-    private static double round(double value, int places) {
-        if (places < 0) throw new IllegalArgumentException();
-
-        BigDecimal bd = new BigDecimal(Double.toString(value));
-        bd = bd.setScale(places, RoundingMode.HALF_UP);
-        return bd.doubleValue();
-    }
 
     public void setRestartButton(Game game) {
         Button button = new Button("Restart");

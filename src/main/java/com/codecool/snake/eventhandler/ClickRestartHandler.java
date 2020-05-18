@@ -10,6 +10,7 @@ public class ClickRestartHandler implements EventHandler<ActionEvent> {
     public void handle(ActionEvent event) {
 
         Globals.getInstance().stopGame();
+        Globals.getInstance().game.getSnakes().clear();
         Globals.getInstance().display.clear();
         Globals.getInstance().game.init();
         Globals.getInstance().game.start();

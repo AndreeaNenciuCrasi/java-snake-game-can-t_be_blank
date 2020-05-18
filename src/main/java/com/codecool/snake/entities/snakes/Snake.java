@@ -13,7 +13,7 @@ import javafx.scene.input.KeyCode;
 
 public class Snake implements Animatable {
     private static float speed;
-    private int health = 100;
+    private int health;
     private int id;
 
     private SnakeHead head;
@@ -24,7 +24,9 @@ public class Snake implements Animatable {
         head = new SnakeHead(this, position, imageHead);
         body = new DelayedModificationList<>();
         this.id = id;
+        this.health = 100;
         this.speed = 1.5f;
+
         addPart(4);
     }
 
@@ -41,13 +43,13 @@ public class Snake implements Animatable {
     }
 
     public void step() {
-        SnakeControl turnDir = getUserInput();
+        SnakeControl turnDir = null;
         switch (id){
             case 0:
-                turnDir =getUserInput();
+                turnDir =getUserInput(KeyCode.LEFT , KeyCode.RIGHT, KeyCode.SPACE);
                 break;
             case 1:
-                turnDir = getUserInputPlayer2();
+                turnDir = getUserInput(KeyCode.A,KeyCode.D, KeyCode.S);
                 break;
             default:
                 System.out.println("System error direction");
@@ -60,19 +62,11 @@ public class Snake implements Animatable {
         body.doPendingModifications();
     }
 
-    private SnakeControl getUserInput() {
+    private SnakeControl getUserInput(KeyCode turnLeft, KeyCode turnRight, KeyCode shoot) {
         SnakeControl turnDir = SnakeControl.INVALID;
-        if(InputHandler.getInstance().isKeyPressed(KeyCode.LEFT)) turnDir = SnakeControl.TURN_LEFT;
-        if(InputHandler.getInstance().isKeyPressed(KeyCode.RIGHT)) turnDir = SnakeControl.TURN_RIGHT;
-        if(InputHandler.getInstance().isKeyPressed(KeyCode.SPACE)) turnDir = SnakeControl.SHOOT;
-        return turnDir;
-    }
-
-    private SnakeControl getUserInputPlayer2() {
-        SnakeControl turnDir = SnakeControl.INVALID;
-        if(InputHandler.getInstance().isKeyPressed(KeyCode.A)) turnDir = SnakeControl.TURN_LEFT;
-        if(InputHandler.getInstance().isKeyPressed(KeyCode.D)) turnDir = SnakeControl.TURN_RIGHT;
-        if(InputHandler.getInstance().isKeyPressed(KeyCode.S)) turnDir = SnakeControl.SHOOT;
+        if(InputHandler.getInstance().isKeyPressed(turnLeft)) turnDir = SnakeControl.TURN_LEFT;
+        if(InputHandler.getInstance().isKeyPressed(turnRight)) turnDir = SnakeControl.TURN_RIGHT;
+        if(InputHandler.getInstance().isKeyPressed(shoot)) turnDir = SnakeControl.SHOOT;
         return turnDir;
     }
 

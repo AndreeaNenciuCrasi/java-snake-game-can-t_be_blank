@@ -47,6 +47,6 @@ public class SnakeLaser extends GameEntity implements Animatable,Interactable{
 
     @Override
     public String getMessage() {
-        return ("damage");
+        return ("Snake Shoot ! damage");
     }
 }
