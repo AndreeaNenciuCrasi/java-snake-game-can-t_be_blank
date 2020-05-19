@@ -1,6 +1,7 @@
 package com.codecool.snake.entities.snakes;
 
 import com.codecool.snake.DelayedModificationList;
+import com.codecool.snake.Game;
 import com.codecool.snake.Globals;
 import com.codecool.snake.PopupScreen;
 import com.codecool.snake.entities.Animatable;
@@ -14,18 +15,27 @@ import javafx.scene.input.KeyCode;
 public class Snake implements Animatable {
     private static float speed;
     private int health;
-    private int id;
+    private int id ;
+    public static int counterId = 0;
 
     private SnakeHead head;
     private DelayedModificationList<GameEntity> body;
     private int lengthBodyPartsTotal = 0;
+    private KeyCode turnLeft;
+    private KeyCode turnRight;
+    private KeyCode shoot;
 
-    public Snake(Point2D position, int id, String imageHead) {
+
+    public Snake(Point2D position, String imageHead, KeyCode turnLeft, KeyCode turnRight, KeyCode shoot) {
         head = new SnakeHead(this, position, imageHead);
         body = new DelayedModificationList<>();
-        this.id = id;
+        this.id = counterId;
+        counterId ++;
         this.health = 100;
         this.speed = 1.5f;
+        this.turnLeft = turnLeft;
+        this.turnRight = turnRight;
+        this.shoot = shoot;
 
         addPart(4);
     }
@@ -42,18 +52,10 @@ public class Snake implements Animatable {
         this.health = health;
     }
 
+
     public void step() {
-        SnakeControl turnDir = null;
-        switch (id){
-            case 0:
-                turnDir =getUserInput(KeyCode.LEFT , KeyCode.RIGHT, KeyCode.SPACE);
-                break;
-            case 1:
-                turnDir = getUserInput(KeyCode.A,KeyCode.D, KeyCode.S);
-                break;
-            default:
-                System.out.println("System error direction");
-        }
+
+        SnakeControl turnDir = getUserInput();
 
         head.updateRotation(turnDir, speed);
 
@@ -62,11 +64,11 @@ public class Snake implements Animatable {
         body.doPendingModifications();
     }
 
-    private SnakeControl getUserInput(KeyCode turnLeft, KeyCode turnRight, KeyCode shoot) {
+    private SnakeControl getUserInput() {
         SnakeControl turnDir = SnakeControl.INVALID;
-        if(InputHandler.getInstance().isKeyPressed(turnLeft)) turnDir = SnakeControl.TURN_LEFT;
-        if(InputHandler.getInstance().isKeyPressed(turnRight)) turnDir = SnakeControl.TURN_RIGHT;
-        if(InputHandler.getInstance().isKeyPressed(shoot)) turnDir = SnakeControl.SHOOT;
+        if(InputHandler.getInstance().isKeyPressed(this.turnLeft)) turnDir = SnakeControl.TURN_LEFT;
+        if(InputHandler.getInstance().isKeyPressed(this.turnRight)) turnDir = SnakeControl.TURN_RIGHT;
+        if(InputHandler.getInstance().isKeyPressed(this.shoot)) turnDir = SnakeControl.SHOOT;
         return turnDir;
     }
 

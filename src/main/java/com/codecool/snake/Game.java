@@ -7,6 +7,7 @@ import com.codecool.snake.entities.powerups.DoubleLengthPowerUp;
 import com.codecool.snake.entities.powerups.SimplePowerUp;
 import com.codecool.snake.entities.powerups.SpeedBoostPowerUp;
 import com.codecool.snake.entities.snakes.Snake;
+import com.codecool.snake.entities.snakes.SnakeHead;
 import com.codecool.snake.eventhandler.ClickRestartHandler;
 import com.codecool.snake.eventhandler.InputHandler;
 
@@ -14,6 +15,7 @@ import javafx.geometry.Point2D;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -94,8 +96,8 @@ public class Game extends Pane {
     }
 
     private void spawnSnake() {
-        snakes.add(new Snake(new Point2D(500, 500), 0, "SnakeHead"));
-        snakes.add(new Snake(new Point2D(400, 400), 1, "SnakeHead2"));
+        snakes.add(new Snake(new Point2D(500, 500),  "SnakeHead", KeyCode.LEFT, KeyCode.RIGHT,KeyCode.SPACE));
+        snakes.add(new Snake(new Point2D(400, 400),  "SnakeHead2", KeyCode.A, KeyCode.D, KeyCode.S));
     }
 
     public List<Snake> getSnakes() {
@@ -138,7 +140,9 @@ public class Game extends Pane {
     }
 
     private boolean checkHeadCollision(){
-            return Globals.getInstance().game.getSnakes().get(0).getHead().intersects(Globals.getInstance().game.getSnakes().get(1).getHead().getBoundsInLocal());
+            SnakeHead sneakHead1 = Globals.getInstance().game.getSnakes().get(0).getHead();
+            SnakeHead sneakHead2 = Globals.getInstance().game.getSnakes().get(1).getHead();
+           return sneakHead1.intersects(sneakHead2.getBoundsInLocal());
        }
 
 
