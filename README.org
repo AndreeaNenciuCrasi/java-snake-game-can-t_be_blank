@@ -3,6 +3,12 @@
 
 This is a snake game with full 360 degree rotation.
 
+** Screenshot  
+
+
+
+#+html: <p align="center"><img src="ScreenshotGame.png"/></p>
+
 * Development
 
 ** Inside IntelliJ Idea
