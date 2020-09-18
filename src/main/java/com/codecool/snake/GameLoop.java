@@ -8,10 +8,14 @@ import com.codecool.snake.entities.snakes.Snake;
 import java.util.List;
 
 public class GameLoop {
-    private Snake snake;
+    private List<Snake> snakes;
+
     private boolean running = false;
 
-    public GameLoop(Snake snake) { this.snake = snake; }
+
+    public GameLoop(List<Snake> snakes) {
+        this.snakes = snakes;
+    }
 
     public void start() {
         running = true;
@@ -23,7 +27,12 @@ public class GameLoop {
 
     public void step() {
         if(running) {
-            snake.step();
+            for (Snake snake : snakes){
+                Globals.getInstance().game.checkGameOver();
+                if (snake.getHealth() > 0){
+                    snake.step();
+                }
+            }
             for (GameEntity gameObject : Globals.getInstance().display.getObjectList()) {
                 if (gameObject instanceof Animatable) {
                     ((Animatable) gameObject).step();
@@ -31,8 +40,11 @@ public class GameLoop {
             }
             checkCollisions();
         }
-
         Globals.getInstance().display.frameFinished();
+      // updates HealthBar
+        Globals.getInstance().game.getHealthBarSnake1().setWidth(2*Globals.getInstance().game.getSnakes().get(0).getHealth());
+        Globals.getInstance().game.getHealthBarSnake2().setWidth(2*Globals.getInstance().game.getSnakes().get(1).getHealth());
+
     }
 
     private void checkCollisions() {
